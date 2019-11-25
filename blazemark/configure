@@ -683,6 +683,9 @@ fi
 if [ "$EIGEN" = "yes" ]; then
    DMATDVECMULT="$DMATDVECMULT \$(OBJECT_PATH)/EIGEN_DMatDVecMult.o"
 fi
+if [ "$NGSOLVE" = "yes" ]; then
+   DMATDVECMULT="$DMATDVECMULT \$(OBJECT_PATH)/NGSOLVE_DMatDVecMult.o"
+fi
 DMATDVECMULT="$DMATDVECMULT \$(OBJECT_PATH)/MAIN_DMatDVecMult.o"
 
 # Configuration of the transpose dense matrix/dense vector multiplication benchmark
@@ -2303,7 +2306,7 @@ fi
 if [ -n "$NGSOLVE_INCLUDE_PATH" ]; then
 cat >> Makefile <<EOF
 
-# Exporting the Eigen include path
+# Exporting the NGSolve include path
 export NGSOLVE_INCLUDE_PATH = $NGSOLVE_INCLUDE_PATH
 EOF
 fi
@@ -3910,6 +3913,14 @@ cat >> Makefile <<EOF
 \$(OBJECT_PATH)/EIGEN_DMatDVecMult.o:
 	@echo "  Building the Eigen kernel..."
 	${SILENT}\$(CXX) \$(CXXFLAGS) -c -o \$(OBJECT_PATH)/EIGEN_DMatDVecMult.o \$(INSTALL_PATH)/src/eigen/DMatDVecMult.cpp \$(INCLUDES)
+EOF
+fi
+
+if [ "$NGSOLVE" = "yes" ]; then
+cat >> Makefile <<EOF
+\$(OBJECT_PATH)/NGSOLVE_DMatDVecMult.o:
+	@echo "  Building the NGSolve kernel..."
+	${SILENT}\$(CXX) \$(CXXFLAGS) -c -o \$(OBJECT_PATH)/NGSOLVE_DMatDVecMult.o \$(INSTALL_PATH)/src/ngsolve/DMatDVecMult.cpp \$(INCLUDES)
 EOF
 fi
 

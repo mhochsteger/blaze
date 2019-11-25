@@ -59,6 +59,7 @@
 #include <blazemark/eigen/DMatDVecMult.h>
 #include <blazemark/flens/DMatDVecMult.h>
 #include <blazemark/mtl/DMatDVecMult.h>
+#include <blazemark/ngsolve/DMatDVecMult.h>
 #include <blazemark/system/BLAS.h>
 #include <blazemark/system/Blitz.h>
 #include <blazemark/system/Boost.h>
@@ -66,6 +67,7 @@
 #include <blazemark/system/Eigen.h>
 #include <blazemark/system/FLENS.h>
 #include <blazemark/system/MTL.h>
+#include <blazemark/system/ngsolve.h>
 #include <blazemark/system/Types.h>
 #include <blazemark/util/Benchmarks.h>
 #include <blazemark/util/DynamicDenseRun.h>
@@ -223,6 +225,18 @@ void dmatdvecmult( std::vector<Run>& runs, Benchmarks benchmarks )
          std::cout << "     " << std::setw(12) << N << mflops << "\n";
       }
    }
+#if BLAZEMARK_NGSOLVE_MODE
+   if( benchmarks.runNGSolve ) {
+      std::cout << "   NGSolve implementation [MFlop/s]:\n";
+      for( std::vector<Run>::iterator run=runs.begin(); run!=runs.end(); ++run ) {
+         const size_t N    ( run->getSize()  );
+         const size_t steps( run->getSteps() );
+         run->setNGSolveResult( blazemark::ngsolve::dmatdvecmult( N, steps ) );
+         const double mflops( run->getFlops() * steps / run->getNGSolveResult() / 1E6 );
+         std::cout << "     " << std::setw(12) << N << mflops << std::endl;
+      }
+   }
+#endif
 
 #if BLAZEMARK_BLAS_MODE
    if( benchmarks.runBLAS ) {
