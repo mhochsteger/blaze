@@ -164,3 +164,11 @@ MTL_INCLUDE_PATH=
 EIGEN="no"
 EIGEN_MKL_INSTALLED="no"
 EIGEN_INCLUDE_PATH=
+
+# Configuration of the NGSolve library (optional)
+# This switch includes or excludes all benchmark kernels for the NGSolve library. If
+# the switch is set to 'yes' all NGSolve kernels are included in the compilation process.
+# In case the NGSolve include directory is not set, Blaze
+# expects the according headers in standard paths (for example '/usr/include/').
+NGSOLVE="no"
+NGSOLVE_INCLUDE_PATH=

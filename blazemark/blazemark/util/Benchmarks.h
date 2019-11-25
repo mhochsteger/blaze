@@ -137,6 +137,11 @@ struct Benchmarks
                             is available for a particular benchmark, the kernel is included in the
                             benchmark tests. In case the runEigen flag is set to \a false, the
                             Eigen kernel will be skipped.*/
+   bool runNGSolve;      //!< Flag value for the NGSolve benchmark kernels.
+                       /*!< In case the runBlaze flag is set to \a true and in case a NGSolve kernel
+                            is available for a particular benchmark, the kernel is included in the
+                            benchmark tests. In case the runNGSolve flag is set to \a false, the
+                            NGSolve kernel will be skipped.*/
    //@}
    //**********************************************************************************************
 };
@@ -166,6 +171,7 @@ inline Benchmarks::Benchmarks()
    , runFLENS    ( blazemark::runFLENS     )  // Flag value for the FLENS benchmark kernels
    , runMTL      ( blazemark::runMTL       )  // Flag value for the MTL benchmark kernels
    , runEigen    ( blazemark::runEigen     )  // Flag value for the Eigen benchmark kernels
+   , runNGSolve  ( blazemark::runNGSolve   )  // Flag value for the NGSolve benchmark kernels
 {}
 //*************************************************************************************************
 
@@ -229,6 +235,7 @@ inline Benchmarks::Benchmarks()
 */
 inline void parseCommandLineArguments( int argc, char** argv, Benchmarks& benchmarks )
 {
+   benchmarks.runNGSolve = true;
    for( int i=1; i<argc; ++i )
    {
       if( std::strcmp( argv[i], "-clike" ) == 0 ) {

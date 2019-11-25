@@ -51,6 +51,7 @@ const bool runArmadillo ( true );  //!< Armadillo benchmark tests
 const bool runFLENS     ( true );  //!< FLENS benchmark tests
 const bool runMTL       ( true );  //!< MTL benchmark tests
 const bool runEigen     ( true );  //!< Eigen benchmark tests
+const bool runNGSolve   ( true );  //!< NGSolve benchmark tests
 //*************************************************************************************************
 
 

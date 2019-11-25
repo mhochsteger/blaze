@@ -109,6 +109,7 @@ class DynamicDenseRun
    inline double getFLENSResult    () const;
    inline double getMTLResult      () const;
    inline double getEigenResult    () const;
+   inline double getNGSolveResult  () const;
 
    inline void   setSize ( size_t newSize  );
    inline void   setSteps( size_t newSteps );
@@ -124,6 +125,7 @@ class DynamicDenseRun
    inline void   setFLENSResult    ( double result );
    inline void   setMTLResult      ( double result );
    inline void   setEigenResult    ( double result );
+   inline void   setNGSolveResult    ( double result );
    //@}
    //**********************************************************************************************
 
@@ -154,6 +156,7 @@ class DynamicDenseRun
    double flens_;      //!< Benchmark result of the FLENS library.
    double mtl_;        //!< Benchmark result of the MTL4 library.
    double eigen_;      //!< Benchmark result of the Eigen3 library.
+   double ngsolve_;    //!< Benchmark result of the NGSolve library.
    //@}
    //**********************************************************************************************
 
@@ -445,6 +448,18 @@ inline double DynamicDenseRun::getEigenResult() const
 
 
 //*************************************************************************************************
+/*!\brief Returns the benchmark result of the NGSolve library.
+//
+// \return The result of the NGSolve library.
+*/
+inline double DynamicDenseRun::getNGSolveResult() const
+{
+   return ngsolve_;
+}
+//*************************************************************************************************
+
+
+//*************************************************************************************************
 /*!\brief Setting the target size of the vectors/matrices of the benchmark run.
 //
 // \param newSize The new target size of the vectors/matrices of the benchmark run.
@@ -662,6 +677,22 @@ inline void DynamicDenseRun::setEigenResult( double result )
 //*************************************************************************************************
 
 
+//*************************************************************************************************
+/*!\brief Setting the benchmark result of the NGSolve library.
+//
+// \param result The result of the NGSolve library.
+// \return void
+// \exception std::invalid_argument Invalid result value.
+*/
+inline void DynamicDenseRun::setNGSolveResult( double result )
+{
+   if( result < 0.0 )
+      throw std::invalid_argument( "Invalid result value" );
+   ngsolve_ = result;
+}
+//*************************************************************************************************
+
+
 
 
 //=================================================================================================
@@ -713,6 +744,7 @@ inline std::ostream& operator<<( std::ostream& os, const DynamicDenseRun& run )
    const double flens    ( run.getFLENSResult()     );
    const double mtl      ( run.getMTLResult()       );
    const double eigen    ( run.getEigenResult()     );
+   const double ngsolve  ( run.getNGSolveResult()   );
 
    double minTime = ::blaze::inf;
 
@@ -727,6 +759,7 @@ inline std::ostream& operator<<( std::ostream& os, const DynamicDenseRun& run )
    if( flens     != 0.0 ) minTime = ::blaze::min( minTime, flens     );
    if( mtl       != 0.0 ) minTime = ::blaze::min( minTime, mtl       );
    if( eigen     != 0.0 ) minTime = ::blaze::min( minTime, eigen     );
+   if( ngsolve   != 0.0 ) minTime = ::blaze::min( minTime, ngsolve   );
 
    if( clike     != 0.0 ) os << "     C-like      = " << std::setw(8) << ( clike     / minTime ) << " (" << clike     << ")\n";
    if( classic   != 0.0 ) os << "     Classic     = " << std::setw(8) << ( classic   / minTime ) << " (" << classic   << ")\n";
@@ -739,6 +772,7 @@ inline std::ostream& operator<<( std::ostream& os, const DynamicDenseRun& run )
    if( flens     != 0.0 ) os << "     FLENS       = " << std::setw(8) << ( flens     / minTime ) << " (" << flens     << ")\n";
    if( mtl       != 0.0 ) os << "     MTL         = " << std::setw(8) << ( mtl       / minTime ) << " (" << mtl       << ")\n";
    if( eigen     != 0.0 ) os << "     Eigen       = " << std::setw(8) << ( eigen     / minTime ) << " (" << eigen     << ")\n";
+   if( ngsolve   != 0.0 ) os << "     NGSolve     = " << std::setw(8) << ( ngsolve   / minTime ) << " (" << ngsolve   << ")\n";
 
    os << std::flush;
 

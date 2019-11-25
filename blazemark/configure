@@ -254,6 +254,13 @@ if [ "$EIGEN" = "yes" ]; then
    fi
 fi
 
+NGSOLVE_INCLUDE_PATH=${NGSOLVE_INCLUDE_PATH%"/"}
+if [ "$NGSOLVE" = "yes" ]; then
+   if [ -n "$NGSOLVE_INCLUDE_PATH" ] && [[ ! "$INCLUDES" =~ "$NGSOLVE_INCLUDE_PATH " ]]; then
+      INCLUDES="${INCLUDES%" "} -isystem $NGSOLVE_INCLUDE_PATH "
+   fi
+fi
+
 INCLUDES=${INCLUDES%" "}
 
 # Configuration of the library path and link libraries
@@ -1239,6 +1246,9 @@ if [ "$MTL" = "yes" ]; then
 fi
 if [ "$EIGEN" = "yes" ]; then
    DMATDMATMULT="$DMATDMATMULT \$(OBJECT_PATH)/EIGEN_DMatDMatMult.o"
+fi
+if [ "$NGSOLVE" = "yes" ]; then
+   DMATDMATMULT="$DMATDMATMULT \$(OBJECT_PATH)/NGSOLVE_DMatDMatMult.o"
 fi
 DMATDMATMULT="$DMATDMATMULT \$(OBJECT_PATH)/MAIN_DMatDMatMult.o"
 
@@ -2290,6 +2300,14 @@ export EIGEN_INCLUDE_PATH = $EIGEN_INCLUDE_PATH
 EOF
 fi
 
+if [ -n "$NGSOLVE_INCLUDE_PATH" ]; then
+cat >> Makefile <<EOF
+
+# Exporting the Eigen include path
+export NGSOLVE_INCLUDE_PATH = $NGSOLVE_INCLUDE_PATH
+EOF
+fi
+
 cat >> Makefile <<EOF
 
 # Includes
@@ -2408,6 +2426,17 @@ cat >> Makefile <<EOF
 eigen:
 	@echo "Building the Eigen kernels..."
 	${SILENT}\$(MAKE) --no-print-directory -C \$(INSTALL_PATH)/src/eigen
+	@echo "... finished!"
+	@echo
+EOF
+fi
+
+if [ "$NGSOLVE" = "yes" ]; then
+cat >> Makefile <<EOF
+
+ngsolve:
+	@echo "Building the NGSolve kernels..."
+	${SILENT}\$(MAKE) --no-print-directory -C \$(INSTALL_PATH)/src/ngsolve
 	@echo "... finished!"
 	@echo
 EOF
@@ -5843,6 +5872,14 @@ cat >> Makefile <<EOF
 \$(OBJECT_PATH)/EIGEN_DMatDMatMult.o:
 	@echo "  Building the Eigen kernel..."
 	${SILENT}\$(CXX) \$(CXXFLAGS) -c -o \$(OBJECT_PATH)/EIGEN_DMatDMatMult.o \$(INSTALL_PATH)/src/eigen/DMatDMatMult.cpp \$(INCLUDES)
+EOF
+fi
+
+if [ "$NGSOLVE" = "yes" ]; then
+cat >> Makefile <<EOF
+\$(OBJECT_PATH)/NGSOLVE_DMatDMatMult.o:
+	@echo "  Building the NGSolve kernel..."
+	${SILENT}\$(CXX) \$(CXXFLAGS) -c -o \$(OBJECT_PATH)/NGSOLVE_DMatDMatMult.o \$(INSTALL_PATH)/src/ngsolve/DMatDMatMult.cpp \$(INCLUDES)
 EOF
 fi
 
@@ -9710,6 +9747,85 @@ EOF
 fi
 
 cat >> ./blazemark/system/Eigen.h <<EOF
+//*************************************************************************************************
+
+#endif
+EOF
+
+#########################################
+# Generating the 'ngsolve.h' header file
+
+cat > ./blazemark/system/ngsolve.h <<EOF
+//=================================================================================================
+/*!
+//  \file blazemark/system/ngsolve.h
+//  \brief System settings for the NGSolve performance benchmarks
+//
+//  Copyright (C) 2012-2019 Klaus Iglberger - All Rights Reserved
+//
+//  This file is part of the Blaze library. You can redistribute it and/or modify it under
+//  the terms of the New (Revised) BSD License. Redistribution and use in source and binary
+//  forms, with or without modification, are permitted provided that the following conditions
+//  are met:
+//
+//  1. Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright notice, this list
+//     of conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//  3. Neither the names of the Blaze development group nor the names of its contributors
+//     may be used to endorse or promote products derived from this software without specific
+//     prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+//  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+//  SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+//  TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+//  BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+//  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+//  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+//  DAMAGE.
+*/
+//=================================================================================================
+
+#ifndef _BLAZEMARK_SYSTEM_NGSOLVE_H_
+#define _BLAZEMARK_SYSTEM_NGSOLVE_H_
+
+
+//=================================================================================================
+//
+//  NGSOLVE CONFIGURATION
+//
+//=================================================================================================
+
+//*************************************************************************************************
+/*!\brief Compilation switch for the NGSolve performance benchmarks.
+//
+// This compilation switch enables/disables the NGSolve library performance benchmarks.
+//
+// Possible settings for the NGSolve switch:
+//  - Deactivated: \b 0
+//  - Activated  : \b 1
+//
+// Note that changing this setting requires a recompilation of the Blaze benchmark suite. Also
+// note that this switch is automatically set by the configuration script of the Blaze benchmark
+// suite.
+*/
+EOF
+
+if [ "$NGSOLVE" = "yes" ]; then
+cat >> ./blazemark/system/ngsolve.h <<EOF
+#define BLAZEMARK_NGSOLVE_MODE 1
+EOF
+else
+cat >> ./blazemark/system/ngsolve.h <<EOF
+#define BLAZEMARK_NGSOLVE_MODE 0
+EOF
+fi
+
+cat >> ./blazemark/system/ngsolve.h <<EOF
 //*************************************************************************************************
 
 #endif
