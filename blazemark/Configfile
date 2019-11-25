@@ -33,7 +33,7 @@
 
 # Compiler selection
 # This variable specifies the compiler used for the compilation of all benchmarks.
-CXX=
+CXX=ngscxx
 
 # Special compiler flags
 # This variable specifies the compiler flags used for the compilation of all benchmarks.
@@ -45,7 +45,7 @@ INCLUDE_DIRECTIVES=
 
 # Special library directives
 # This variable can be used to specify special/additional library-related compiler directives.
-LIBRARY_DIRECTIVES=
+LIBRARY_DIRECTIVES=" -L $NETGENDIR/../lib/ -lngbla"
 
 # Configuration of the BLAS library (optional)
 # The Blaze as well as the MTL library offer the possibilty to use a BLAS library for
@@ -170,5 +170,5 @@ EIGEN_INCLUDE_PATH=
 # the switch is set to 'yes' all NGSolve kernels are included in the compilation process.
 # In case the NGSolve include directory is not set, Blaze
 # expects the according headers in standard paths (for example '/usr/include/').
-NGSOLVE="no"
-NGSOLVE_INCLUDE_PATH=
+NGSOLVE="yes"
+NGSOLVE_INCLUDE_PATH="$NETGENDIR/../netgen/include"
