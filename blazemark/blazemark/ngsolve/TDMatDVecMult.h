@@ -1,6 +1,7 @@
 //=================================================================================================
-//
-//  Parameter file for the dense matrix/dense vector multiplication benchmark
+/*!
+//  \file blazemark/ngsolve/DMatDVecMult.h
+//  \brief Header file for the NGSolve dense matrix/dense vector multiplication kernel
 //
 //  Copyright (C) 2012-2019 Klaus Iglberger - All Rights Reserved
 //
@@ -28,122 +29,39 @@
 //  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 //  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 //  DAMAGE.
-//
-//=================================================================================================
-
-
-//=================================================================================================
-// This parameter file configures the dense matrix/dense vector multiplication benchmark runs.
-// The individual runs are specified via tuples of the form
-//
-//                                     ( <size> [, <steps>] ),
-//
-// where 'size' specifies the number of rows and columns of the matrix and the size of the vector
-// and the optional parameter 'steps' specifies the number of steps the benchmark is repeated. In
-// case 'steps' is omitted, the number of steps is automatically evaluated.
-//
-// Note that it is possible to use comments. A single-line comment can be started with '//', a
-// multiline commend can be started with '/*' and ended with '*/'.
-//=================================================================================================
-
-// Selected matrix/vector sizes
-/*
-(   50)
-(  100)
-(  500)
-( 1000)
-( 5000)
-(10000)
 */
+//=================================================================================================
 
-// Logarithmic performance graph
-(    1)
-(    2)
-(    3)
-(    4)
-(    5)
-(    6)
-(    7)
-(    8)
-(    9)
-(   10)
-(   11)
-(   12)
-(   13)
-(   14)
-(   15)
-(   16)
-(   17)
-(   18)
-(   19)
-(   20)
-(   22)
-(   24)
-(   26)
-(   28)
-(   30)
-(   33)
-(   36)
-(   39)
-(   42)
-(   46)
-(   50)
-(   55)
-(   60)
-(   66)
-(   72)
-(   79)
-(   86)
-(   94)
-(  103)
-/*
-(  113)
-(  124)
-(  136)
-(  149)
-(  163)
-(  179)
-(  196)
-(  215)
-(  236)
-(  259)
-(  284)
-(  312)
-(  343)
-(  377)
-(  414)
-(  455)
-(  500)
-(  550)
-(  605)
-(  665)
-(  731)
-(  804)
-(  884)
-(  972)
-( 1069)
-( 1175)
-( 1292)
-( 1421)
-( 1563)
-( 1719)
-( 1890)
-( 2079)
-( 2286)
-( 2514)
-( 2765)
-( 3041)
-( 3345)
-( 3679)
-( 4046)
-( 4450)
-( 4895)
-( 5384)
-( 5922)
-( 6514)
-( 7165)
-( 7881)
-( 8669)
-( 9535)
-(10000)
-*/
+#ifndef _BLAZEMARK_NGSOLVE_TDMATDVECMULT_H_
+#define _BLAZEMARK_NGSOLVE_TDMATDVECMULT_H_
+
+
+//*************************************************************************************************
+// Includes
+//*************************************************************************************************
+
+#include <blazemark/system/Types.h>
+
+
+namespace blazemark {
+
+namespace ngsolve {
+
+//=================================================================================================
+//
+//  KERNEL FUNCTIONS
+//
+//=================================================================================================
+
+//*************************************************************************************************
+/*!\name NGSolve kernel functions */
+//@{
+double tdmatdvecmult( size_t N, size_t steps );
+//@}
+//*************************************************************************************************
+
+} // namespace ngsolve
+
+} // namespace blazemark
+
+#endif

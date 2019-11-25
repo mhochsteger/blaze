@@ -715,6 +715,9 @@ fi
 if [ "$EIGEN" = "yes" ]; then
    TDMATDVECMULT="$TDMATDVECMULT \$(OBJECT_PATH)/EIGEN_TDMatDVecMult.o"
 fi
+if [ "$NGSOLVE" = "yes" ]; then
+   TDMATDVECMULT="$TDMATDVECMULT \$(OBJECT_PATH)/NGSOLVE_TDMatDVecMult.o"
+fi
 TDMATDVECMULT="$TDMATDVECMULT \$(OBJECT_PATH)/MAIN_TDMatDVecMult.o"
 
 # Configuration of the dense matrix/sparse vector multiplication benchmark
@@ -4015,6 +4018,15 @@ cat >> Makefile <<EOF
 	${SILENT}\$(CXX) \$(CXXFLAGS) -c -o \$(OBJECT_PATH)/EIGEN_TDMatDVecMult.o \$(INSTALL_PATH)/src/eigen/TDMatDVecMult.cpp \$(INCLUDES)
 EOF
 fi
+
+if [ "$NGSOLVE" = "yes" ]; then
+cat >> Makefile <<EOF
+\$(OBJECT_PATH)/NGSOLVE_TDMatDVecMult.o:
+	@echo "  Building the NGSolve kernel..."
+	${SILENT}\$(CXX) \$(CXXFLAGS) -c -o \$(OBJECT_PATH)/NGSOLVE_TDMatDVecMult.o \$(INSTALL_PATH)/src/ngsolve/TDMatDVecMult.cpp \$(INCLUDES)
+EOF
+fi
+
 
 cat >> Makefile <<EOF
 \$(OBJECT_PATH)/MAIN_TDMatDVecMult.o:
